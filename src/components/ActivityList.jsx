@@ -2,12 +2,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ArrowPathIcon, DocumentTextIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { Button, Card, CardBody, CardHeader, Chip, IconButton, Tooltip, Typography } from "@material-tailwind/react";
+import DialogCreateActivity from "./DialogCreateActivity";
 
 const TABLE_HEAD = ["Descrição", "Data", "Horas/Req", "Status", " "];
 
-const ActivityList = ({ user, token, configs }) => {
+const ActivityList = ({ user, token }) => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [isDialogFree, setIsDialogFree] = useState(false);
+
+  const handleOpenDialog = () => setOpen(!open);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -27,8 +32,44 @@ const ActivityList = ({ user, token, configs }) => {
       }
     };
 
+    const opt = {
+      headers: {
+        accept: "application / json",
+        authorization: `Bearer ${token}`,
+      },
+    };
+
+    const fetchConfigs = async () => {
+      const reqActivityType = axios.get(`http://localhost:3000/activity-type`, opt);
+      const reqEvidenceType = axios.get(`http://localhost:3000/evidence-type`, opt);
+      const reqQuarter = axios.get(`http://localhost:3000/quarter`, opt);
+      const reqGraduation = axios.get(`http://localhost:3000/graduation`, opt);
+
+      try {
+        const [reponseActivityType, responseEvidenceType, responseQuarter, responseGraduation] = await Promise.all([
+          reqActivityType,
+          reqEvidenceType,
+          reqQuarter,
+          reqGraduation,
+        ]);
+
+        const configurations = {
+          activityTypes: reponseActivityType.data,
+          evidenceTypes: responseEvidenceType.data,
+          quarters: responseQuarter.data,
+          graduations: responseGraduation.data,
+        };
+        localStorage.setItem("configs", JSON.stringify(configurations));
+      } catch (error) {
+        console.error("Erro ao buscar configurações:", error);
+      } finally {
+        setIsDialogFree(true);
+      }
+    };
+    fetchConfigs();
+
     fetchActivities();
-  }, []);
+  }, [token, user.id]);
 
   const handlerDate = (date) => {
     const dateObj = new Date(date);
@@ -60,7 +101,7 @@ const ActivityList = ({ user, token, configs }) => {
             </div>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button className="flex items-center gap-3" size="sm" color="blue">
+            <Button className="flex items-center gap-3" size="sm" color="blue" onClick={handleOpenDialog}>
               Adicionar
             </Button>
           </div>
@@ -130,6 +171,7 @@ const ActivityList = ({ user, token, configs }) => {
           </CardBody>
         )}
       </Card>
+      {isDialogFree ? <DialogCreateActivity isOpen={open} handlerOpen={handleOpenDialog} user={user} token={token} /> : null}
     </div>
   );
 };
