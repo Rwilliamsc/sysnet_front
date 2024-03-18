@@ -3,6 +3,8 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import Banner from "./Banner";
+import { Card, Input, Button, Typography } from "@material-tailwind/react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,7 +13,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handlerLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/login", { email, password });
@@ -27,8 +29,6 @@ const Login = () => {
 
       localStorage.setItem("user", JSON.stringify(user));
 
-      console.log(decoded);
-
       navigate("/dashboard");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
@@ -41,43 +41,61 @@ const Login = () => {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleLogin}>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-            Usuário
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-            Senha
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            type="password"
-            placeholder="*********"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Entrar
-          </button>
-        </div>
-      </form>
+    <div>
+      <Banner />
+      <div className="flex justify-center items-center flex-col ">
+        <Card className="flex justify-center items-center mt-4" color="transparent" shadow={true}>
+          <Typography variant="h4" color="blue-gray">
+            SystNet
+          </Typography>
+          <Typography color="gray" className="mt-1 font-normal">
+            Legal encontarar você! Entre com seu email e senha.
+          </Typography>
+
+          <form className="mt-8 mb-2 ml-3 mr-3 w-80 max-w-screen-lg sm:w-96" onSubmit={handlerLogin}>
+            <div className="mb-1 flex flex-col gap-6">
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Email
+              </Typography>
+              <Input
+                size="lg"
+                type="email"
+                placeholder="name@mail.com"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Password
+              </Typography>
+              <Input
+                type="password"
+                size="lg"
+                placeholder="********"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <Button type="submit" className="mt-6" fullWidth>
+              Logar
+            </Button>
+            <Typography color="gray" className="mt-4 text-center font-normal">
+              Não tenho uma conta{" "}
+              <a href="#" className="font-medium text-gray-900">
+                Cadastrar
+              </a>
+            </Typography>
+          </form>
+        </Card>
+      </div>
     </div>
   );
 };
