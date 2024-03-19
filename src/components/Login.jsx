@@ -33,14 +33,14 @@ const Login = ({ addToken, addUser }) => {
         id: decoded.sub,
         email: decoded.email,
         name: decoded.name,
+        role: decoded.role,
       };
       addUser(user);
       localStorage.setItem("user", JSON.stringify(user));
-
       toast.success("Login efetuado com sucesso!");
       navigate("/dashboard");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message?.toString() || "Erro ao tentar logar");
       console.error("Erro ao fazer login:", error);
     }
   };

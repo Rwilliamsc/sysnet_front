@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import ActivityList from "./ActivityList";
 import Banner from "./Banner";
 import { useEffect } from "react";
+import ActivityListAdmin from "./ActivityListAdmin";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Dashboard = () => {
         <div>
           <Banner />
           <div className="flex justify-center ">
-            <ActivityList user={user} token={token} />
+            {user.role === "student" ? <ActivityList user={user} token={token} /> : <ActivityListAdmin user={user} token={token} />}
           </div>
         </div>
       ) : null}
