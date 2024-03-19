@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,12 @@ const Login = () => {
   const { token } = useAuth();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
 
   const handlerLogin = async (e) => {
     e.preventDefault();
@@ -34,11 +40,6 @@ const Login = () => {
       console.error("Erro ao fazer login:", error);
     }
   };
-
-  // Redireciona se já estiver autenticado
-  if (token) {
-    navigate("/dashboard");
-  }
 
   return (
     <div>

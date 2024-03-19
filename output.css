@@ -1295,6 +1295,10 @@ video {
   width: 2/4;
 }
 
+.w-2\/4 {
+  width: 50%;
+}
+
 .min-w-\[100vw\] {
   min-width: 100vw;
 }
@@ -2737,6 +2741,10 @@ video {
 
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .text-start {

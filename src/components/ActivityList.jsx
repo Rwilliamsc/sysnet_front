@@ -90,7 +90,7 @@ const ActivityList = ({ user, token }) => {
   };
 
   return (
-    <div>
+    <div className="w-1/2">
       <Card className="h-full w-full overflow-scroll">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-8 flex items-center justify-between gap-8">
@@ -102,12 +102,15 @@ const ActivityList = ({ user, token }) => {
                 {user.email}
               </Typography>
             </div>
-            <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+            <div className="text-right">
               <Typography variant="h6" color="blue-gray">
-                Total de Horas: 40
+                Total de Horas: 200
               </Typography>
               <Typography variant="h6" color="blue-gray">
-                Horas Aprovadas: 40
+                Horas Aprovadas: {activities.reduce((acc, curr) => (curr.status === "approved" ? acc + curr.activityHours : acc), 0)}
+              </Typography>
+              <Typography variant="h6" color="blue-gray">
+                Horas em Aprovação: {activities.reduce((acc, curr) => (curr.status === "pending" ? acc + curr.activityHours : acc), 0)}
               </Typography>
             </div>
           </div>
