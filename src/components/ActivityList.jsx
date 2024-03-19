@@ -3,6 +3,7 @@ import axios from "axios";
 import { ArrowPathIcon, DocumentTextIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { Button, Card, CardBody, CardHeader, Chip, IconButton, Tooltip, Typography } from "@material-tailwind/react";
 import DialogCreateActivity from "./DialogCreateActivity";
+import DialogEditActivity from "./DialogEditActivity";
 
 const TABLE_HEAD = ["Descrição", "Data", "Horas/Req", "Status", " "];
 
@@ -10,9 +11,12 @@ const ActivityList = ({ user, token }) => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [isDialogFree, setIsDialogFree] = useState(false);
+  const [activityId, setActivityId] = useState(0);
 
   const handleOpenDialog = () => setOpen(!open);
+  const handleOpenDialogEdit = () => setOpenEdit(!openEdit);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -26,7 +30,7 @@ const ActivityList = ({ user, token }) => {
         const response = await axios.get(`http://localhost:3000/activities/byuser/${user.id}`, options);
         setActivities(response.data);
       } catch (error) {
-        console.error("Erro ao buscar atividades:", error);
+        console.error("Error ao fetch activities:", error);
       } finally {
         setLoading(false);
       }
@@ -34,7 +38,7 @@ const ActivityList = ({ user, token }) => {
 
     const opt = {
       headers: {
-        accept: "application / json",
+        accept: "application/json",
         authorization: `Bearer ${token}`,
       },
     };
@@ -46,7 +50,7 @@ const ActivityList = ({ user, token }) => {
       const reqGraduation = axios.get(`http://localhost:3000/graduation`, opt);
 
       try {
-        const [reponseActivityType, responseEvidenceType, responseQuarter, responseGraduation] = await Promise.all([
+        const [responseActivityType, responseEvidenceType, responseQuarter, responseGraduation] = await Promise.all([
           reqActivityType,
           reqEvidenceType,
           reqQuarter,
@@ -54,14 +58,15 @@ const ActivityList = ({ user, token }) => {
         ]);
 
         const configurations = {
-          activityTypes: reponseActivityType.data,
+          activityTypes: responseActivityType.data,
           evidenceTypes: responseEvidenceType.data,
           quarters: responseQuarter.data,
           graduations: responseGraduation.data,
         };
+
         localStorage.setItem("configs", JSON.stringify(configurations));
       } catch (error) {
-        console.error("Erro ao buscar configurações:", error);
+        console.error("Error ao fetch configurations:", error);
       } finally {
         setIsDialogFree(true);
       }
@@ -69,13 +74,19 @@ const ActivityList = ({ user, token }) => {
     fetchConfigs();
 
     fetchActivities();
+
+    return () => {
+      setIsDialogFree(false);
+    };
   }, [token, user.id]);
 
   const handlerDate = (date) => {
-    const dateObj = new Date(date);
-    const hours = dateObj.getHours();
-    const minutes = dateObj.getMinutes();
-    return `${dateObj.toLocaleDateString()} ${hours}:${minutes}`;
+    return date.split("T")[0];
+  };
+
+  const handleSetIdOnpenDialog = (id) => {
+    setOpenEdit(!openEdit);
+    setActivityId(id);
   };
 
   return (
@@ -125,7 +136,7 @@ const ActivityList = ({ user, token }) => {
                 </tr>
               </thead>
               <tbody>
-                {activities.map(({ description, activityDate, activityHours, status }, index) => (
+                {activities.map(({ description, activityDate, activityHours, status, id }, index) => (
                   <tr key={`activities-${index}`} className="even:bg-blue-gray-50/50">
                     <td className="p-4 text-center">
                       <Typography variant="small" color="blue-gray" className="font-normal">
@@ -159,7 +170,7 @@ const ActivityList = ({ user, token }) => {
                         </IconButton>
                       </Tooltip>
                       <Tooltip content="Editar">
-                        <IconButton variant="text" hidden={status !== "pending"}>
+                        <IconButton variant="text" hidden={status !== "pending"} onClick={() => handleSetIdOnpenDialog(id)}>
                           <PencilIcon className="h-4 w-4" color="green" />
                         </IconButton>
                       </Tooltip>
@@ -171,7 +182,20 @@ const ActivityList = ({ user, token }) => {
           </CardBody>
         )}
       </Card>
-      {isDialogFree ? <DialogCreateActivity isOpen={open} handlerOpen={handleOpenDialog} user={user} token={token} /> : null}
+      {isDialogFree ? (
+        <DialogCreateActivity isOpen={open} handlerOpen={handleOpenDialog} user={user} token={token} setActivities={setActivities} />
+      ) : null}
+      {activityId ? (
+        <DialogEditActivity
+          isOpen={openEdit}
+          handlerOpen={handleOpenDialogEdit}
+          user={user}
+          token={token}
+          setActivities={setActivities}
+          activities={activities}
+          activityId={activityId}
+        />
+      ) : null}
     </div>
   );
 };

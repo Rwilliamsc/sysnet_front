@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Dialog, Card, CardBody, CardFooter, Typography, Input, Select, Option } from "@material-tailwind/react";
 import axios from "axios";
 
-function DialogCreateActivity({ isOpen, handlerOpen, user, token }) {
+function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities }) {
   const [graduation, setGraduation] = useState("");
   const [quarter, setQuarter] = useState("");
   const [activityType, setActivityType] = useState("");
@@ -48,7 +48,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token }) {
         authorization: `Bearer ${token}`,
       },
     };
-    await axios.post("http://localhost:3000/activities", data, options);
+    const response = await axios.post("http://localhost:3000/activities", data, options);
 
     setGraduation("");
     setQuarter("");
@@ -58,6 +58,8 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token }) {
     setHours("");
     setLink("");
     setDescription("");
+
+    setActivities((prev) => [...prev, response.data]);
 
     handlerOpen();
   };
