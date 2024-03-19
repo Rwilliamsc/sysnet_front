@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Banner from "./Banner";
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
+import { toast } from "react-toastify";
 
-const Login = () => {
+const Login = ({ addToken, addUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { token } = useAuth();
@@ -24,6 +25,7 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:3000/login", { email, password });
       localStorage.setItem("token", response.data.access_token);
+      addToken(response.data.access_token);
 
       const decoded = jwtDecode(response.data.access_token);
 
@@ -32,11 +34,13 @@ const Login = () => {
         email: decoded.email,
         name: decoded.name,
       };
-
+      addUser(user);
       localStorage.setItem("user", JSON.stringify(user));
 
+      toast.success("Login efetuado com sucesso!");
       navigate("/dashboard");
     } catch (error) {
+      toast.error(error.message);
       console.error("Erro ao fazer login:", error);
     }
   };
@@ -90,9 +94,9 @@ const Login = () => {
             </Button>
             <Typography color="gray" className="mt-4 text-center font-normal">
               Não tenho uma conta{" "}
-              <a href="#" className="font-medium text-gray-900">
+              <Link to="/signup" className="text-blue-500">
                 Cadastrar
-              </a>
+              </Link>
             </Typography>
           </form>
         </Card>

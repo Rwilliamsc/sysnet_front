@@ -4,12 +4,6 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
-  const token = localStorage.getItem("token");
-  let user = localStorage.getItem("user");
-
-  if (user) {
-    user = JSON.parse(user);
-  }
+export const AuthProvider = ({ token, user, children }) => {
   return <AuthContext.Provider value={{ token, user }}>{children}</AuthContext.Provider>;
 };

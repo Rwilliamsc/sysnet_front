@@ -10,8 +10,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!token) {
-      console.log("Não autenticado, redirecionando para /Login");
-
       navigate("/Login");
     }
   }, [token, navigate]);

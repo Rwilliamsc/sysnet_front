@@ -68,7 +68,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
     <>
       <Dialog size="xl" open={isOpen} handler={handlerOpen} className="bg-transparent shadow-none">
         <Card className="mx-auto max-w-[50rem]">
-          <CardBody className="flex flex-col gap-4 overflow-scroll">
+          <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
               Adicionar nova atividade
             </Typography>
@@ -86,6 +86,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
                   labelProps={{
                     className: "before:content-none after:content-none",
                   }}
+                  value={graduation}
                   menuProps={{ className: "h-48" }}
                   onChange={(e) => setGraduation(e)}
                 >
@@ -102,6 +103,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
                 </Typography>
                 <Select
                   placeholder="Escolher Trimestre"
+                  value={quarter}
                   className="!border-t-blue-gray-200 focus:!border-t-gray-900"
                   labelProps={{
                     className: "before:content-none after:content-none",
@@ -124,6 +126,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
                 </Typography>
                 <Select
                   placeholder="Escolher Tipo de Atividade"
+                  value={activityType}
                   className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                   labelProps={{
                     className: "before:content-none after:content-none",
@@ -163,6 +166,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
 
             <Select
               placeholder="Escolher Tipo de Comprovação"
+              value={evidenceType}
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",

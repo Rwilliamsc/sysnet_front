@@ -41,9 +41,9 @@ function DialogEditActivity({ isOpen, handlerOpen, user, token, setActivities, a
       setDescription(act.description);
       setActivity(act);
     }
-  }, [activities, activityId, activity]);
+  }, [activities, activityId]);
 
-  const handlerCreateActivity = async () => {
+  const handlerEditActivity = async () => {
     const data = {
       activityDate: new Date(activityDate),
       activityHours: parseInt(hours),
@@ -87,7 +87,7 @@ function DialogEditActivity({ isOpen, handlerOpen, user, token, setActivities, a
       {activity ? (
         <Dialog size="xl" open={isOpen} handler={handlerOpen} className="bg-transparent shadow-none">
           <Card className="mx-auto max-w-[50rem]">
-            <CardBody className="flex flex-col gap-4 overflow-scroll">
+            <CardBody className="flex flex-col gap-4">
               <Typography variant="h4" color="blue-gray">
                 Adicionar nova atividade
               </Typography>
@@ -248,7 +248,7 @@ function DialogEditActivity({ isOpen, handlerOpen, user, token, setActivities, a
                 <Button variant="outlined" onClick={handlerOpen} fullWidth>
                   Cancelar
                 </Button>
-                <Button variant="gradient" onClick={handlerCreateActivity} fullWidth>
+                <Button variant="gradient" onClick={handlerEditActivity} fullWidth>
                   Enviar
                 </Button>
               </div>

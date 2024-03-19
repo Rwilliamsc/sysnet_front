@@ -19,13 +19,14 @@ const ActivityList = ({ user, token }) => {
   const handleOpenDialogEdit = () => setOpenEdit(!openEdit);
 
   useEffect(() => {
+    const options = {
+      headers: {
+        accept: "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    };
+
     const fetchActivities = async () => {
-      const options = {
-        headers: {
-          accept: "application/json",
-          authorization: `Bearer ${token}`,
-        },
-      };
       try {
         const response = await axios.get(`http://localhost:3000/activities/byuser/${user.id}`, options);
         setActivities(response.data);
@@ -36,18 +37,11 @@ const ActivityList = ({ user, token }) => {
       }
     };
 
-    const opt = {
-      headers: {
-        accept: "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    };
-
     const fetchConfigs = async () => {
-      const reqActivityType = axios.get(`http://localhost:3000/activity-type`, opt);
-      const reqEvidenceType = axios.get(`http://localhost:3000/evidence-type`, opt);
-      const reqQuarter = axios.get(`http://localhost:3000/quarter`, opt);
-      const reqGraduation = axios.get(`http://localhost:3000/graduation`, opt);
+      const reqActivityType = axios.get(`http://localhost:3000/activity-type`, options);
+      const reqEvidenceType = axios.get(`http://localhost:3000/evidence-type`, options);
+      const reqQuarter = axios.get(`http://localhost:3000/quarter`, options);
+      const reqGraduation = axios.get(`http://localhost:3000/graduation`, options);
 
       try {
         const [responseActivityType, responseEvidenceType, responseQuarter, responseGraduation] = await Promise.all([
@@ -84,9 +78,10 @@ const ActivityList = ({ user, token }) => {
     return date.split("T")[0];
   };
 
-  const handleSetIdOnpenDialog = (id) => {
-    setOpenEdit(!openEdit);
+  const handleSetIdOpenDialog = (id) => {
     setActivityId(id);
+
+    handleOpenDialogEdit();
   };
 
   return (
@@ -173,7 +168,7 @@ const ActivityList = ({ user, token }) => {
                         </IconButton>
                       </Tooltip>
                       <Tooltip content="Editar">
-                        <IconButton variant="text" hidden={status !== "pending"} onClick={() => handleSetIdOnpenDialog(id)}>
+                        <IconButton variant="text" hidden={status !== "pending"} onClick={() => handleSetIdOpenDialog(id)}>
                           <PencilIcon className="h-4 w-4" color="green" />
                         </IconButton>
                       </Tooltip>
