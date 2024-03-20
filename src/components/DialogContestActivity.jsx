@@ -20,7 +20,6 @@ function DialogContestActivity({ isOpen, handlerOpen, token, setActivities, acti
 
     const response = await axios.patch(`https://api.escolalms.com/api/v1/activities/${activityId}`, data, options);
     setActivities(activities.map((activity) => (activity.id === activityId ? response.data.data : activity)));
-
     handlerOpen();
   };
 
