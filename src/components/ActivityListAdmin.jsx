@@ -20,7 +20,7 @@ const ActivityListAdmin = ({ user, token }) => {
 
     const fetchActivities = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/activities/pending`, options);
+        const response = await axios.get(`http://localhost:3000/activities/${user.role === "admin" ? "pending" : "contested"}`, options);
         setActivities(response.data);
       } catch (error) {
         console.error("Error ao fetch activities:", error);
@@ -48,8 +48,11 @@ const ActivityListAdmin = ({ user, token }) => {
     };
     try {
       await axios.patch(`http://localhost:3000/activities/${id}`, data, options);
-      const response = await axios.get(`http://localhost:3000/activities/pending`, options);
-      setActivities(response.data);
+      const newActivity = {
+        ...activities.find((activity) => activity.id === id),
+        ...data,
+      };
+      setActivities(activities.map((activity) => (activity.id === id ? newActivity : activity)));
       toast.warn("Atividade rejeitada com sucesso!");
     } catch (error) {
       toast.error("Erro ao rejeitar atividade");
@@ -61,6 +64,7 @@ const ActivityListAdmin = ({ user, token }) => {
     console.log("approve", id);
     const data = {
       status: "approved",
+      approved: true,
     };
     const options = {
       headers: {
@@ -70,8 +74,11 @@ const ActivityListAdmin = ({ user, token }) => {
     };
     try {
       await axios.patch(`http://localhost:3000/activities/${id}`, data, options);
-      const response = await axios.get(`http://localhost:3000/activities/pending`, options);
-      setActivities(response.data);
+      const newActivity = {
+        ...activities.find((activity) => activity.id === id),
+        ...data,
+      };
+      setActivities(activities.map((activity) => (activity.id === id ? newActivity : activity)));
       toast.success("Atividade aprovada com sucesso!");
     } catch (error) {
       toast.error("Erro ao aprovar atividade");
@@ -152,12 +159,12 @@ const ActivityListAdmin = ({ user, token }) => {
                     </td>
                     <td className="p-4">
                       <Tooltip content="Rejeitar">
-                        <IconButton variant="text" onClick={() => handleReject(id)}>
+                        <IconButton variant="text" onClick={() => handleReject(id)} hidden={status === "rejected" || status === "approved"}>
                           <NoSymbolIcon className="h-4 w-4" color="red" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip content="Aprovar">
-                        <IconButton variant="text" onClick={() => handleApprove(id)}>
+                        <IconButton variant="text" onClick={() => handleApprove(id)} hidden={status === "rejected" || status === "approved"}>
                           <CheckIcon className="h-4 w-4" color="green" />
                         </IconButton>
                       </Tooltip>

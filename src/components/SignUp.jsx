@@ -14,6 +14,8 @@ const SignUp = () => {
   const [role, setRole] = useState("");
   const { token } = useAuth();
 
+  const roles = ["Estudante", "Administrativo", "Coordenador"];
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const SignUp = () => {
         password,
         documentNumber,
         name,
-        role: role === "Estudante" ? "student" : "admin",
+        role: role === "Estudante" ? "student" : role === "Administrativo" ? "admin" : "coordinator",
       };
       await axios.post("http://localhost:3000/signup", data);
 
@@ -127,7 +129,7 @@ const SignUp = () => {
                 menuProps={{ className: "h-48" }}
                 onChange={(e) => setRole(e)}
               >
-                {["Estudante", "Administrativo"].map((name, index) => (
+                {roles.map((name, index) => (
                   <Option key={`graduations-${index}`} value={name}>
                     <div className="flex items-center gap-x-2">{name}</div>
                   </Option>
@@ -135,7 +137,7 @@ const SignUp = () => {
               </Select>
             </div>
 
-            <Button type="submit" className="mt-6" fullWidth>
+            <Button type="submit" color="blue" className="mt-6" fullWidth>
               Cadastrar
             </Button>
           </form>

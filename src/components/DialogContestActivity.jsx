@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Dialog, Card, CardBody, CardFooter, Typography, Textarea } from "@material-tailwind/react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function DialogContestActivity({ isOpen, handlerOpen, token, setActivities, activities, activityId }) {
   const [description, setDescription] = useState("");
 
+  useEffect(() => {
+    setDescription(activities.find((activity) => activity.id === activityId)?.contestation || "");
+  }, [activityId, activities]);
+
   const handleContestActivity = async () => {
     const data = {
-      ...activities.find((it) => it.id === activityId),
       status: "contested",
       contestation: description,
+      contested: true,
     };
     const options = {
       headers: {
@@ -17,10 +22,20 @@ function DialogContestActivity({ isOpen, handlerOpen, token, setActivities, acti
         authorization: `Bearer ${token}`,
       },
     };
-
-    const response = await axios.patch(`https://api.escolalms.com/api/v1/activities/${activityId}`, data, options);
-    setActivities(activities.map((activity) => (activity.id === activityId ? response.data.data : activity)));
-    handlerOpen();
+    try {
+      await axios.patch(`http://localhost:3000/activities/${activityId}`, data, options);
+      const newActivity = {
+        ...activities.find((activity) => activity.id === activityId),
+        status: "contested",
+        contestation: description,
+      };
+      setActivities(activities.map((activity) => (activity.id === activityId ? newActivity : activity)));
+      toast.success("Atividade contestada com sucesso!");
+      handlerOpen();
+    } catch (error) {
+      toast.error(error.response?.data?.message?.toString() || "Erro ao contestar atividade");
+      console.error("Error ao contestar atividade:", error);
+    }
   };
 
   return (

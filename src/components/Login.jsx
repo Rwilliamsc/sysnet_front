@@ -89,7 +89,7 @@ const Login = ({ addToken, addUser }) => {
               />
             </div>
 
-            <Button type="submit" className="mt-6" fullWidth>
+            <Button type="submit" color="blue" className="mt-6" fullWidth>
               Logar
             </Button>
             <Typography color="gray" className="mt-4 text-center font-normal">

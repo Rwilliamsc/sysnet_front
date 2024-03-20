@@ -33,6 +33,7 @@ const ActivityList = ({ user, token }) => {
       try {
         const response = await axios.get(`http://localhost:3000/activities/byuser/${user.id}`, options);
         setActivities(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error ao fetch activities:", error);
       } finally {
@@ -143,7 +144,7 @@ const ActivityList = ({ user, token }) => {
                 </tr>
               </thead>
               <tbody>
-                {activities.map(({ description, activityDate, activityHours, status, id }, index) => (
+                {activities.map(({ description, activityDate, activityHours, status, id, contested }, index) => (
                   <tr key={`activities-${index}`} className="even:bg-blue-gray-50/50">
                     <td className="p-4 text-center">
                       <Typography variant="small" color="blue-gray" className="font-normal">
@@ -180,7 +181,7 @@ const ActivityList = ({ user, token }) => {
                     </td>
                     <td className="p-4">
                       <Tooltip content="Contestar">
-                        <IconButton variant="text" hidden={status !== "rejected"}>
+                        <IconButton variant="text" hidden={status !== "rejected"} disabled={contested === true}>
                           <DocumentTextIcon className="h-4 w-4" color="red" onClick={() => handleSetIdOpenDialogContest(id)} />
                         </IconButton>
                       </Tooltip>

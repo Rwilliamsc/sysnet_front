@@ -2,7 +2,6 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import { Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -26,7 +25,7 @@ const App = () => {
   return (
     <AuthProvider token={token} user={user}>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Dashboard />} />
         <Route exact path="/login" element={<Login addToken={setToken} addUser={setUser} />} />
         <Route exact path="/signup" element={<SignUp />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
