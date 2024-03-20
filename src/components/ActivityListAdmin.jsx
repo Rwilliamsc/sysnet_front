@@ -30,7 +30,7 @@ const ActivityListAdmin = ({ user, token }) => {
     };
 
     fetchActivities();
-  }, [token, user.id]);
+  }, [token, user.role]);
 
   const handlerDate = (date) => {
     return date.split("T")[0];
