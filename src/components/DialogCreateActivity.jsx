@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Dialog, Card, CardBody, CardFooter, Typography, Input, Select, Option } from "@material-tailwind/react";
+import { Button, Dialog, Card, CardBody, CardFooter, Typography, Input, Select, Option, Textarea } from "@material-tailwind/react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -78,9 +78,6 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
             <Typography variant="h4" color="blue-gray">
               Adicionar nova atividade
             </Typography>
-            <Typography className="mb-3 font-normal" variant="paragraph" color="gray">
-              Enter your email and password to Sign In.
-            </Typography>
             <div className=" flex items-center justify-between gap-3">
               <div className="w-96">
                 <Typography className="" variant="h6">
@@ -105,7 +102,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
               </div>
               <div className="w-96">
                 <Typography variant="h6">
-                  Em qual trimestre você iniciou sua graduação? <span color="red">*</span>
+                  Trimestre de início da graduação <span className="text-red-600">*</span>
                 </Typography>
                 <Select
                   placeholder="Escolher Trimestre"
@@ -128,7 +125,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
             <div className=" flex items-center justify-between gap-3">
               <div className="w-96">
                 <Typography variant="h6">
-                  Tipo de Atividade <span color="red">*</span>
+                  Tipo de Atividade <span className="text-red-600">*</span>
                 </Typography>
                 <Select
                   placeholder="Escolher Tipo de Atividade"
@@ -149,7 +146,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
               </div>
               <div className="w-96">
                 <Typography variant="h6">
-                  Qual foi o dia da atividade? <span color="red">*</span>
+                  Data da atividade <span className="text-red-600">*</span>
                 </Typography>
                 <Input
                   maxLength={10}
@@ -165,46 +162,50 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
                 />
               </div>
             </div>
+            <div className=" flex items-center justify-between gap-3">
+              <div className="w-96">
+                <Typography variant="h6">
+                  Tipo de Comprovação <span className="text-red-600">*</span>
+                </Typography>
+
+                <Select
+                  placeholder="Escolher Tipo de Comprovação"
+                  value={evidenceType}
+                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                  labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
+                  menuProps={{ className: "h-48" }}
+                  onChange={(e) => setEvidenceType(e)}
+                >
+                  {evidenceTypes.map(({ name }, index) => (
+                    <Option key={`evidenceTypes-${index}`} value={name}>
+                      <div className="flex items-center gap-x-2">{name}</div>
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              <div className="w-96">
+                <Typography variant="h6">
+                  Horas Solicitadas <span className="text-red-600">*</span>
+                </Typography>
+                <Input
+                  type="text"
+                  placeholder="Descrição da atividade"
+                  className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+                  labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
+                  onChange={(e) => setHours(e.target.value)}
+                  value={hours}
+                />
+              </div>
+            </div>
 
             <Typography className="-mb-2" variant="h6">
-              Qual o tipo de comprovação utilizado? <span color="red">*</span>
+              Justifique a atividade <span className="text-red-600">*</span>
             </Typography>
-
-            <Select
-              placeholder="Escolher Tipo de Comprovação"
-              value={evidenceType}
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              menuProps={{ className: "h-48" }}
-              onChange={(e) => setEvidenceType(e)}
-            >
-              {evidenceTypes.map(({ name }, index) => (
-                <Option key={`evidenceTypes-${index}`} value={name}>
-                  <div className="flex items-center gap-x-2">{name}</div>
-                </Option>
-              ))}
-            </Select>
-
-            <Typography className="-mb-2" variant="h6">
-              Quantas horas você está solicitando para esta atividade?<span color="red">*</span>
-            </Typography>
-            <Input
-              type="text"
-              placeholder="Descrição da atividade"
-              className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              onChange={(e) => setHours(e.target.value)}
-              value={hours}
-            />
-
-            <Typography className="-mb-2" variant="h6">
-              Como essa atividade se relaciona com a sua graduação?
-            </Typography>
-            <Input
+            <Textarea
               type="text"
               placeholder="Descrição da atividade"
               className="!border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -213,8 +214,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
               }}
               onChange={(e) => setDescription(e.target.value)}
               value={description}
-            />
-
+            ></Textarea>
             <Typography className="-mb-2" variant="h6">
               Adicione o link do seu comprovante
             </Typography>

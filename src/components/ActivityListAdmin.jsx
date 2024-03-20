@@ -33,7 +33,7 @@ const ActivityListAdmin = ({ user, token }) => {
   }, [token, user.role]);
 
   const handlerDate = (date) => {
-    return date.split("T")[0];
+    return date.split("T")[0].split("-").reverse().join("/");
   };
   const handleReject = async (id) => {
     const data = {
@@ -145,8 +145,16 @@ const ActivityListAdmin = ({ user, token }) => {
                         <Chip
                           variant="ghost"
                           size="sm"
-                          value={status}
-                          color={status === "approved" ? "green" : status === "pending" ? "amber" : "red"}
+                          value={
+                            status === "approved"
+                              ? "Aprovado"
+                              : status === "pending"
+                              ? "Pendente"
+                              : status === "rejected"
+                              ? "Rejeitado"
+                              : "Contestado"
+                          }
+                          color={status === "approved" ? "green" : status === "pending" || status === "contested" ? "amber" : "red"}
                         />
                       </div>
                     </td>

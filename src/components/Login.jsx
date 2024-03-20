@@ -50,7 +50,7 @@ const Login = ({ addToken, addUser }) => {
       <div className="flex justify-center items-center flex-col ">
         <Card className="flex justify-center items-center mt-4" color="transparent" shadow={true}>
           <Typography variant="h4" color="blue-gray">
-            SystNet
+            SysNet
           </Typography>
           <Typography color="gray" className="mt-1 font-normal">
             Legal encontrar você! Entre com seu email e senha.

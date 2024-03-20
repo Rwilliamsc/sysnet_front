@@ -39,6 +39,9 @@ const SignUp = () => {
       toast.success("Cadastro efetuado com sucesso!");
       navigate("/login");
     } catch (error) {
+      if (error.response.status === 422) {
+        return toast.error("CPF ou email já cadastrado");
+      }
       toast.error(error.response?.data?.message?.toString() || "Erro ao fazer cadastro:");
     }
   };
@@ -49,7 +52,7 @@ const SignUp = () => {
       <div className="flex justify-center items-center flex-col ">
         <Card className="flex justify-center items-center mt-4" color="transparent" shadow={true}>
           <Typography variant="h4" color="blue-gray">
-            SystNet
+            SysNet
           </Typography>
           <Typography color="gray" className="mt-1 font-normal">
             Legal encontrar você! Realize o seu cadastro.
@@ -79,7 +82,6 @@ const SignUp = () => {
                 type="text"
                 placeholder="___.___.___-__"
                 maxLength={14}
-                required
                 className="!border-t-blue-gray-200 focus:!border-t-gray-900"
                 labelProps={{
                   className: "before:content-none after:content-none",

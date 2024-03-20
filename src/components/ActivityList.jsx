@@ -78,7 +78,7 @@ const ActivityList = ({ user, token }) => {
   }, [token, user.id]);
 
   const handlerDate = (date) => {
-    return date.split("T")[0];
+    return date.split("T")[0].split("-").reverse().join("/");
   };
 
   const handleSetIdOpenDialog = (id) => {
