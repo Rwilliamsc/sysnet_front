@@ -41,6 +41,8 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
       activityTypeId: activityTypes.find((it) => it.name === activityType).id,
       evidenceTypeId: evidenceTypes.find((it) => it.name === evidenceType).id,
       userId: user.id,
+      contestation: "",
+      contested: false,
     };
     const options = {
       headers: {
@@ -228,7 +230,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
               <Button variant="outlined" onClick={handlerOpen} fullWidth>
                 Cancelar
               </Button>
-              <Button variant="gradient" onClick={handlerCreateActivity} fullWidth>
+              <Button variant="gradient" color="blue" onClick={handlerCreateActivity} fullWidth>
                 Enviar
               </Button>
             </div>

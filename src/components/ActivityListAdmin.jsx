@@ -53,7 +53,7 @@ const ActivityListAdmin = ({ user, token }) => {
       toast.warn("Atividade rejeitada com sucesso!");
     } catch (error) {
       toast.error("Erro ao rejeitar atividade");
-      console.error("Error ao reject activity:", error);
+      console.error("Error ao rejeitar atividade:", error);
     }
   };
 

@@ -1,13 +1,28 @@
-import { useEffect, useState } from "react";
-import { Button, Dialog, Card, CardBody, CardFooter, Typography, Input, Select, Option, Textarea } from "@material-tailwind/react";
+import { useState } from "react";
+import { Button, Dialog, Card, CardBody, CardFooter, Typography, Textarea } from "@material-tailwind/react";
 import axios from "axios";
 
-function DialogContestActivity({ isOpen, handlerOpen, user, token, setActivities, activities, activityId }) {
-const [description, setDescription] =useState("")
+function DialogContestActivity({ isOpen, handlerOpen, token, setActivities, activities, activityId }) {
+  const [description, setDescription] = useState("");
 
- const handleContestActivity=()=>{
+  const handleContestActivity = async () => {
+    const data = {
+      ...activities.find((it) => it.id === activityId),
+      status: "contested",
+      contestation: description,
+    };
+    const options = {
+      headers: {
+        accept: "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    };
 
- }
+    const response = await axios.patch(`https://api.escolalms.com/api/v1/activities/${activityId}`, data, options);
+    setActivities(activities.map((activity) => (activity.id === activityId ? response.data.data : activity)));
+
+    handlerOpen();
+  };
 
   return (
     <>
@@ -20,13 +35,7 @@ const [description, setDescription] =useState("")
             <Typography className="mb-3 font-normal" variant="paragraph" color="gray">
               Descreva o assunto da contestação.
             </Typography>
-            <div className=" flex items-center justify-between gap-3">
-              <div className="w-96">
-                <Typography className="" variant="h6">
-                  Sua graduação
-                </Typography>
-                </div>
-                </div>
+            <div className=" flex items-center justify-between gap-3"></div>
             <Textarea
               placeholder="Descrição da revisão"
               className="!border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -39,10 +48,10 @@ const [description, setDescription] =useState("")
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex items-center justify-between gap-3">
-              <Button variant="outlined" onClick={handlerOpen} fullWidth>
+              <Button variant="outlined" color="blue" onClick={handlerOpen} fullWidth>
                 Cancelar
               </Button>
-              <Button variant="gradient" onClick={handlerCreateActivity} fullWidth>
+              <Button variant="gradient" onClick={handleContestActivity} fullWidth>
                 Enviar
               </Button>
             </div>

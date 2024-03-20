@@ -4,6 +4,7 @@ import { ArrowPathIcon, DocumentTextIcon, PencilIcon } from "@heroicons/react/24
 import { Button, Card, CardBody, CardHeader, Chip, IconButton, Tooltip, Typography } from "@material-tailwind/react";
 import DialogCreateActivity from "./DialogCreateActivity";
 import DialogEditActivity from "./DialogEditActivity";
+import DialogContestActivity from "./DialogContestActivity";
 
 const TABLE_HEAD = ["Descrição", "Data", "Horas/Req", "Status", " "];
 
@@ -12,11 +13,13 @@ const ActivityList = ({ user, token }) => {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openContest, setOpenContest] = useState(false);
   const [isDialogFree, setIsDialogFree] = useState(false);
   const [activityId, setActivityId] = useState(0);
 
   const handleOpenDialog = () => setOpen(!open);
   const handleOpenDialogEdit = () => setOpenEdit(!openEdit);
+  const handleOpenDialogContest = () => setOpenContest(!openContest);
 
   useEffect(() => {
     const options = {
@@ -82,6 +85,12 @@ const ActivityList = ({ user, token }) => {
     setActivityId(id);
 
     handleOpenDialogEdit();
+  };
+
+  const handleSetIdOpenDialogContest = (id) => {
+    setActivityId(id);
+
+    handleOpenDialogContest();
   };
 
   return (
@@ -156,15 +165,23 @@ const ActivityList = ({ user, token }) => {
                         <Chip
                           variant="ghost"
                           size="sm"
-                          value={status === "approved" ? "Aprovado" : status === "pending" ? "Pendente" : "Rejeitado"}
-                          color={status === "approved" ? "green" : status === "pending" ? "amber" : "red"}
+                          value={
+                            status === "approved"
+                              ? "Aprovado"
+                              : status === "pending"
+                              ? "Pendente"
+                              : status === "rejected"
+                              ? "Rejeitado"
+                              : "Contestado"
+                          }
+                          color={status === "approved" ? "green" : status === "pending" || status === "contested" ? "amber" : "red"}
                         />
                       </div>
                     </td>
                     <td className="p-4">
                       <Tooltip content="Contestar">
                         <IconButton variant="text" hidden={status !== "rejected"}>
-                          <DocumentTextIcon className="h-4 w-4" color="red" />
+                          <DocumentTextIcon className="h-4 w-4" color="red" onClick={() => handleSetIdOpenDialogContest(id)} />
                         </IconButton>
                       </Tooltip>
                       <Tooltip content="Editar">
@@ -184,15 +201,25 @@ const ActivityList = ({ user, token }) => {
         <DialogCreateActivity isOpen={open} handlerOpen={handleOpenDialog} user={user} token={token} setActivities={setActivities} />
       ) : null}
       {activityId ? (
-        <DialogEditActivity
-          isOpen={openEdit}
-          handlerOpen={handleOpenDialogEdit}
-          user={user}
-          token={token}
-          setActivities={setActivities}
-          activities={activities}
-          activityId={activityId}
-        />
+        <>
+          <DialogEditActivity
+            isOpen={openEdit}
+            handlerOpen={handleOpenDialogEdit}
+            user={user}
+            token={token}
+            setActivities={setActivities}
+            activities={activities}
+            activityId={activityId}
+          />
+          <DialogContestActivity
+            isOpen={openContest}
+            handlerOpen={handleOpenDialogContest}
+            token={token}
+            setActivities={setActivities}
+            activities={activities}
+            activityId={activityId}
+          />
+        </>
       ) : null}
     </div>
   );
