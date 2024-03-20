@@ -53,7 +53,7 @@ const Login = ({ addToken, addUser }) => {
             SystNet
           </Typography>
           <Typography color="gray" className="mt-1 font-normal">
-            Legal encontarar você! Entre com seu email e senha.
+            Legal encontrar você! Entre com seu email e senha.
           </Typography>
 
           <form className="mt-8 mb-2 ml-3 mr-3 w-80 max-w-screen-lg sm:w-96" onSubmit={handlerLogin}>
@@ -73,7 +73,7 @@ const Login = ({ addToken, addUser }) => {
                 value={email}
               />
               <Typography variant="h6" color="blue-gray" className="-mb-3">
-                Password
+                Senha
               </Typography>
               <Input
                 type="password"

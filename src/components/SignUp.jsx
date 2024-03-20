@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Banner from "./Banner";
 import { Card, Input, Button, Typography, Select, Option } from "@material-tailwind/react";
 import { toast } from "react-toastify";
@@ -52,7 +52,7 @@ const SignUp = () => {
             SystNet
           </Typography>
           <Typography color="gray" className="mt-1 font-normal">
-            Legal encontarar você! Realize o seu cadastro.
+            Legal encontrar você! Realize o seu cadastro.
           </Typography>
 
           <form className="mt-8 mb-2 ml-3 mr-3 w-80 max-w-screen-lg sm:w-96" onSubmit={handlerSignUp}>
@@ -102,7 +102,7 @@ const SignUp = () => {
                 value={email}
               />
               <Typography variant="h6" color="blue-gray" className="-mb-3">
-                Password
+                Senha
               </Typography>
               <Input
                 type="password"
@@ -116,7 +116,7 @@ const SignUp = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Typography variant="h6" color="blue-gray" className="-mb-3">
-                Role
+                Tipo de login
               </Typography>
               <Select
                 placeholder="Função"
@@ -139,6 +139,12 @@ const SignUp = () => {
             <Button type="submit" color="blue" className="mt-6" fullWidth>
               Cadastrar
             </Button>
+            <Typography color="gray" className="mt-4 text-center font-normal">
+              Já tenho uma conta{" "}
+              <Link to="/login" className="text-blue-500">
+                Entrar
+              </Link>
+            </Typography>
           </form>
         </Card>
       </div>
