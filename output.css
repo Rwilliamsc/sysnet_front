@@ -1204,18 +1204,6 @@ video {
   width: 100vw;
 }
 
-.w-1 {
-  width: 0.25rem;
-}
-
-.w-2\/4 {
-  width: 50%;
-}
-
-.w-3\/6 {
-  width: 50%;
-}
-
 .min-w-\[100vw\] {
   min-width: 100vw;
 }
