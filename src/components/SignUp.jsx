@@ -40,7 +40,6 @@ const SignUp = () => {
       navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message?.toString() || "Erro ao fazer cadastro:");
-      console.error("Erro ao fazer cadastro:", error);
     }
   };
 

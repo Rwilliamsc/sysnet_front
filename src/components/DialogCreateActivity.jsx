@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Dialog, Card, CardBody, CardFooter, Typography, Input, Select, Option } from "@material-tailwind/react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities }) {
   const [graduation, setGraduation] = useState("");
@@ -50,20 +51,23 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
         authorization: `Bearer ${token}`,
       },
     };
-    const response = await axios.post("http://localhost:3000/activities", data, options);
+    try {
+      const response = await axios.post("http://localhost:3000/activities", data, options);
+      setGraduation("");
+      setQuarter("");
+      setActivityType("");
+      setEvidenceType("");
+      setActivityDate("");
+      setHours("");
+      setLink("");
+      setDescription("");
 
-    setGraduation("");
-    setQuarter("");
-    setActivityType("");
-    setEvidenceType("");
-    setActivityDate("");
-    setHours("");
-    setLink("");
-    setDescription("");
+      setActivities((prev) => [...prev, response.data]);
 
-    setActivities((prev) => [...prev, response.data]);
-
-    handlerOpen();
+      handlerOpen();
+    } catch (error) {
+      toast.error(error.response?.data?.message?.toString() || "Erro ao criar atividade:");
+    }
   };
 
   return (

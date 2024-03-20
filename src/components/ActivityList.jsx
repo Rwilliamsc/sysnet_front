@@ -33,7 +33,6 @@ const ActivityList = ({ user, token }) => {
       try {
         const response = await axios.get(`http://localhost:3000/activities/byuser/${user.id}`, options);
         setActivities(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error ao fetch activities:", error);
       } finally {

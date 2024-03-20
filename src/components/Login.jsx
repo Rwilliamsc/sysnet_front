@@ -41,7 +41,6 @@ const Login = ({ addToken, addUser }) => {
       navigate("/dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message?.toString() || "Erro ao tentar logar");
-      console.error("Erro ao fazer login:", error);
     }
   };
 

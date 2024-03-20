@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Dialog, Card, CardBody, CardFooter, Typography, Input, Select, Option } from "@material-tailwind/react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function DialogEditActivity({ isOpen, handlerOpen, user, token, setActivities, activities, activityId }) {
   const [graduation, setGraduation] = useState("");
@@ -63,23 +64,27 @@ function DialogEditActivity({ isOpen, handlerOpen, user, token, setActivities, a
         authorization: `Bearer ${token}`,
       },
     };
-    const response = await axios.patch(`http://localhost:3000/activities/${activityId}`, data, options);
+    try {
+      const response = await axios.patch(`http://localhost:3000/activities/${activityId}`, data, options);
 
-    setGraduation("");
-    setQuarter("");
-    setActivityType("");
-    setEvidenceType("");
-    setActivityDate("");
-    setHours("");
-    setLink("");
-    setDescription("");
+      setGraduation("");
+      setQuarter("");
+      setActivityType("");
+      setEvidenceType("");
+      setActivityDate("");
+      setHours("");
+      setLink("");
+      setDescription("");
 
-    const list = [...activities];
-    const index = list.findIndex((it) => it.id === activityId);
-    list[index] = response.data;
-    setActivities(list);
+      const list = [...activities];
+      const index = list.findIndex((it) => it.id === activityId);
+      list[index] = response.data;
+      setActivities(list);
 
-    handlerOpen();
+      handlerOpen();
+    } catch (error) {
+      toast.error(error.response?.data?.message?.toString() || "Erro ao editar atividade:");
+    }
   };
 
   return (

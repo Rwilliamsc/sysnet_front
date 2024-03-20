@@ -36,7 +36,6 @@ const ActivityListAdmin = ({ user, token }) => {
     return date.split("T")[0];
   };
   const handleReject = async (id) => {
-    console.log("reject", id);
     const data = {
       status: "rejected",
     };
@@ -61,7 +60,6 @@ const ActivityListAdmin = ({ user, token }) => {
   };
 
   const handleApprove = async (id) => {
-    console.log("approve", id);
     const data = {
       status: "approved",
       approved: true,
