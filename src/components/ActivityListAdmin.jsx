@@ -85,7 +85,7 @@ const ActivityListAdmin = ({ user, token }) => {
   };
 
   return (
-    <div className="w-4/8">
+    <div className="w-1/2">
       <Card className="h-full w-full overflow-scroll">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-8 flex items-center justify-between gap-8">

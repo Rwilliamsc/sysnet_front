@@ -65,7 +65,7 @@ function DialogContestActivity({ isOpen, handlerOpen, token, setActivities, acti
               <Button variant="outlined" color="blue" onClick={handlerOpen} fullWidth>
                 Cancelar
               </Button>
-              <Button variant="gradient" onClick={handleContestActivity} fullWidth>
+              <Button variant="gradient" color="blue" onClick={handleContestActivity} fullWidth>
                 Enviar
               </Button>
             </div>

@@ -231,7 +231,7 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
           </CardBody>
           <CardFooter className="pt-0">
             <div className=" flex items-center justify-between gap-3">
-              <Button variant="outlined" onClick={handlerOpen} fullWidth>
+              <Button variant="outlined" color="blue" onClick={handlerOpen} fullWidth>
                 Cancelar
               </Button>
               <Button variant="gradient" color="blue" onClick={handlerCreateActivity} fullWidth>
