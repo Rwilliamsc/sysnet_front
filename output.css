@@ -3001,6 +3001,11 @@ video {
   color: rgb(244 67 54 / var(--tw-text-opacity));
 }
 
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(229 57 53 / var(--tw-text-opacity));
+}
+
 .text-red-700 {
   --tw-text-opacity: 1;
   color: rgb(211 47 47 / var(--tw-text-opacity));
@@ -3048,11 +3053,6 @@ video {
 .text-yellow-900 {
   --tw-text-opacity: 1;
   color: rgb(245 127 23 / var(--tw-text-opacity));
-}
-
-.text-red-600 {
-  --tw-text-opacity: 1;
-  color: rgb(229 57 53 / var(--tw-text-opacity));
 }
 
 .antialiased {

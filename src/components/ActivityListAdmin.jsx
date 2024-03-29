@@ -10,18 +10,36 @@ const ActivityListAdmin = ({ user, token }) => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const options = {
-      headers: {
-        accept: "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    };
+  const options = {
+    headers: {
+      accept: "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  };
 
+  const reviewStatus = async (list) => {
+    const limitTime = new Date(new Date().setDate(new Date().getDate() - 30));
+    const responseList = [];
+
+    for (const it of list) {
+      if (it.status !== "approved" && it.status !== "rejected") {
+        const oldStatus = it.status;
+        it.status = it.updatedAt < limitTime ? "approved" : it.status;
+        if (oldStatus !== it.status) {
+          await axios.patch(`http://localhost:3000/activities/${it.id}`, it, options);
+        }
+      }
+      responseList.push(it);
+    }
+    return responseList;
+  };
+
+  useEffect(() => {
     const fetchActivities = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/activities/${user.role === "admin" ? "pending" : "contested"}`, options);
-        setActivities(response.data);
+        const reviewedActivities = await reviewStatus(response.data);
+        setActivities(reviewedActivities);
       } catch (error) {
         console.error("Error ao fetch activities:", error);
       } finally {
@@ -38,12 +56,6 @@ const ActivityListAdmin = ({ user, token }) => {
   const handleReject = async (id) => {
     const data = {
       status: "rejected",
-    };
-    const options = {
-      headers: {
-        accept: "application/json",
-        authorization: `Bearer ${token}`,
-      },
     };
     try {
       await axios.patch(`http://localhost:3000/activities/${id}`, data, options);
@@ -63,12 +75,6 @@ const ActivityListAdmin = ({ user, token }) => {
     const data = {
       status: "approved",
       approved: true,
-    };
-    const options = {
-      headers: {
-        accept: "application/json",
-        authorization: `Bearer ${token}`,
-      },
     };
     try {
       await axios.patch(`http://localhost:3000/activities/${id}`, data, options);

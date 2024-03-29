@@ -30,6 +30,14 @@ function DialogCreateActivity({ isOpen, handlerOpen, user, token, setActivities 
   }, []);
 
   const handlerCreateActivity = async () => {
+    const limitTime = new Date(new Date().setDate(new Date().getDate() - 30));
+
+    if (new Date(activityDate) < limitTime) {
+      toast.error("Desculpe! Atividade está anterior a data limite de 30 dias");
+      handlerOpen();
+      return;
+    }
+
     const data = {
       activityDate: new Date(activityDate),
       activityHours: parseInt(hours),

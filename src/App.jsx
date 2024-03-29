@@ -30,7 +30,7 @@ const App = () => {
         <Route exact path="/signup" element={<SignUp />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
       </Routes>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} />
+      <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} style={{ zIndex: 1000 }} />
     </AuthProvider>
   );
 };
